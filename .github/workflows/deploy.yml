@@ -1,9 +1,9 @@
-name: Deploy Vite Site to GitHub Pages (Main Branch)
+name: Deploy Vite Site to GitHub Pages
 
 on:
   push:
     branches:
-      - main  # Triggers on pushes to the main branch
+      - main  # Change this if your default branch is not `main`
 
 jobs:
   build-and-deploy:
@@ -24,14 +24,8 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Deploy to docs folder on main branch
-        run: |
-          rm -rf ./docs
-          mv ./dist ./docs
-        - name: Push changes to main branch
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs
-          git commit -m "Deploy to GitHub Pages"
-          git push origin main
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
